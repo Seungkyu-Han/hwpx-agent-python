@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hwpx-agent"
+version = "0.0.0"
+description = "A Python automation library for easily creating, editing, and extracting data from HWPX (Hangul Word Processor XML) documents."
+readme = "README.md"
+requires-python = ">=3.12"
+license = {text = "MIT"}
+keywords = [
+    "Agent",
+    "Document",
+    "AI",
+]
+authors = [
+    {name = "Seungkyu-Han", email="trust1204@gmail.com"}
+]
+
+dependencies = [
+
+]
+
+[project.urls]
+"Homepage" = "https://github.com/Seungkyu-Han/hwpx-agent-python"
+"Bug Tracker" = "https://github.com/Seungkyu-Han/hwpx-agent-python"
+"Documentation" = "https://github.com/Seungkyu-Han/hwpx-agent-python"
+"Source" = "https://github.com/Seungkyu-Han/hwpx-agent-python"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+
+[tool.black]
+line-length = 100
+target-version = ['py311', 'py312', 'py313', 'py314']
+
+
+[tool.setuptools]
+packages = ["hwpx_agent"]
