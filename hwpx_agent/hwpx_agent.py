@@ -1,8 +1,8 @@
 from agents import Agent, Runner, ModelSettings
 from hwpx import HwpxDocument
 
-from hwpx_agent.models import HwpxModel
-from hwpx_agent.transformers import model_to_hwpx
+from .models import HwpxModel
+from .transformers import model_to_hwpx
 
 
 class HwpxAgent:
