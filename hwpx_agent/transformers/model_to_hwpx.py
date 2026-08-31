@@ -1,9 +1,12 @@
+import base64
+
 from hwpx import HwpxDocument
 from hwpx_agent.models import (
     HwpxModel,
     HwpxHeadingModel,
     HwpxParagraphModel,
     HwpxTableModel,
+    HwpxImageModel,
 )
 
 
@@ -55,6 +58,22 @@ def model_to_hwpx(hwpx_model: HwpxModel) -> HwpxDocument:
             for element in content.elements:
                 cell = table.cell(row_index=element.row, col_index=element.col)
                 cell.add_paragraph(text=element.text)
+
+        elif isinstance(content, HwpxImageModel):
+
+            base64_image = content.base64_image
+
+            if not base64_image:
+                continue
+
+            image_id = hwpx_document.add_image(
+                image_data=base64.b64decode(base64_image),
+                image_format="png",
+            )
+
+            paragraph = hwpx_document.add_paragraph()
+
+            paragraph.add_picture(binary_item_id_ref=image_id)
 
 
     return hwpx_document
