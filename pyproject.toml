@@ -20,7 +20,9 @@ authors = [
 
 dependencies = [
     "openai-agents>=0.22.0",
-    "python-hwpx>=6.3.0"
+    "python-hwpx>=6.3.0",
+    "langgraph>=1.2.11",
+    "langchain-openai>=1.6.0"
 ]
 
 [project.urls]
