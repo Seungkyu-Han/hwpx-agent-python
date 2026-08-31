@@ -1,14 +1,10 @@
-import base64
-
 from pydantic import BaseModel, Field
 
 
 class HwpxImageModel(BaseModel):
-    base64_image: str = Field(
+    image_prompt: str = Field(
         ...,
-        description="Base64로 인코딩된 이미지 문자열"
+        description="이미지 생성을 위한 구체적인 이미지 설명 프롬프트 (예: 'DNA 이중선 꼬임 구조 일러스트')"
     )
 
-    @property
-    def buffer(self) -> bytes:
-        return base64.b64decode(self.base64_image)
+    base64_image: str | None = Field(default=None)
