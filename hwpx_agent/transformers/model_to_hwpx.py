@@ -1,5 +1,10 @@
 from hwpx import HwpxDocument
-from hwpx_agent.models import HwpxModel, HwpxHeadingModel
+from hwpx_agent.models import (
+    HwpxModel,
+    HwpxHeadingModel,
+    HwpxParagraphModel,
+    HwpxTableModel,
+)
 
 
 def model_to_hwpx(hwpx_model: HwpxModel) -> HwpxDocument:
@@ -10,7 +15,7 @@ def model_to_hwpx(hwpx_model: HwpxModel) -> HwpxDocument:
         if isinstance(content, HwpxHeadingModel):
              hwpx_document.add_heading(content.text, level=content.level)
 
-        else:
+        elif isinstance(content, HwpxParagraphModel):
             char_pr_id = hwpx_document.styles.ensure_run(
                 size=content.style.size,
                 italic=content.style.italic,
@@ -38,6 +43,18 @@ def model_to_hwpx(hwpx_model: HwpxModel) -> HwpxDocument:
             )
 
             paragraph.add_run(text=content.text, char_pr_id_ref=char_pr_id)
+
+        elif isinstance(content, HwpxTableModel):
+
+            section = hwpx_document.add_section()
+
+            paragraph = section.add_paragraph()
+
+            table = paragraph.add_table(rows=content.rows, cols=content.cols)
+
+            for element in content.elements:
+                cell = table.cell(row_index=element.row, col_index=element.col)
+                cell.add_paragraph(text=element.text)
 
 
     return hwpx_document
