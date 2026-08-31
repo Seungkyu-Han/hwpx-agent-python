@@ -6,33 +6,38 @@ def model_to_hwpx(hwpx_model: HwpxModel) -> HwpxDocument:
 
     hwpx_document: HwpxDocument = HwpxDocument.new()
 
-    for paragraph in hwpx_model.content:
-        if isinstance(paragraph, HwpxHeadingModel):
-            hwpx_document.add_heading(paragraph.text, level=paragraph.level)
+    for content in hwpx_model.contents:
+        if isinstance(content, HwpxHeadingModel):
+             hwpx_document.add_heading(content.text, level=content.level)
 
         else:
-
-            style_id = hwpx_document.styles.ensure_run(
-                size=paragraph.style.size,
-                italic=paragraph.style.italic,
-                underline=paragraph.style.underline,
-                color=paragraph.style.color,
-                font=paragraph.style.font,
-                highlight=paragraph.style.highlight,
-                strike=paragraph.style.strike,
-                underline_shape=paragraph.style.underline_shape,
-                underline_color=paragraph.style.underline_color,
-                strike_shape=paragraph.style.strike_shape,
-                ratio=paragraph.style.ratio,
-                letter_spacing=paragraph.style.letter_spacing,
-                shadow=paragraph.style.shadow,
-                script=paragraph.style.script,
-                outline=paragraph.style.outline,
-                emboss=paragraph.style.emboss,
-                engrave=paragraph.style.engrave,
+            char_pr_id = hwpx_document.styles.ensure_run(
+                size=content.style.size,
+                italic=content.style.italic,
+                underline=content.style.underline,
+                color=content.style.color,
+                font=content.style.font,
+                highlight=content.style.highlight,
+                strike=content.style.strike,
+                underline_shape=content.style.underline_shape,
+                underline_color=content.style.underline_color,
+                strike_shape=content.style.strike_shape,
+                ratio=content.style.ratio,
+                letter_spacing=content.style.letter_spacing,
+                shadow=content.style.shadow,
+                script=content.style.script,
+                outline=content.style.outline,
+                emboss=content.style.emboss,
+                engrave=content.style.engrave,
             )
 
-            hwpx_document.add_paragraph(paragraph.text, style=style_id)
+            paragraph = hwpx_document.add_paragraph(
+                text="",
+                style_id_ref=0,
+                para_pr_id_ref=0,
+            )
+
+            paragraph.add_run(text=content.text, char_pr_id_ref=char_pr_id)
 
 
     return hwpx_document
