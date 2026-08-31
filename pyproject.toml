@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hwpx-agent"
-version = "0.0.0"
+version = "0.0.1"
 description = "A Python automation library for easily creating, editing, and extracting data from HWPX (Hangul Word Processor XML) documents."
 readme = "README.md"
 requires-python = ">=3.12"
