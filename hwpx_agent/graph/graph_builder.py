@@ -1,4 +1,4 @@
-from typing import Callable, Literal
+from typing import Callable, Coroutine, Any, Literal
 
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.state import CompiledStateGraph
@@ -15,19 +15,21 @@ def route_image_generate_node(state: State) -> Literal["image_generate_node", "_
 
 
 def build_graph(
-        hwpx_template_agent: Callable[[str], HwpxModel],
-        image_generate_agent: Callable[[HwpxModel], HwpxModel],
+        hwpx_template_agent: Callable[[str], Coroutine[Any, Any, HwpxModel]],
+        image_generate_agent: Callable[[HwpxModel], Coroutine[Any, Any, HwpxModel]],
 ) -> CompiledStateGraph:
     builder = StateGraph(State)
 
-    def hwpx_template_node(state: State) -> dict:
+    async def hwpx_template_node(state: State) -> dict[str, HwpxModel]:
+        result = await hwpx_template_agent(state.prompt)
         return {
-            hwpx_model: hwpx_template_agent(state.prompt),
+            "hwpx_model": result,
         }
 
-    def image_generate_node(state: State) -> dict:
+    async def image_generate_node(state: State) -> dict[str, HwpxModel]:
+        result = await image_generate_agent(state.hwpx_model)
         return {
-            hwpx_model: image_generate_agent(state.hwpx_model),
+            "hwpx_model": result
         }
 
     builder.add_node("hwpx_template_node", hwpx_template_node)
@@ -38,9 +40,11 @@ def build_graph(
         "hwpx_template_node",
         route_image_generate_node,
         {
-            "image_generate_node": "hwpx_template_node",
+            "image_generate_node": "image_generate_node",
             "_end": END,
         }
     )
+
+    builder.add_edge("image_generate_node", END)
 
     return builder.compile()
