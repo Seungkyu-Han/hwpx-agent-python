@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hwpx-agent"
-version = "0.0.3"
+version = "0.0.4"
 description = "A Python automation library for easily creating, editing, and extracting data from HWPX (Hangul Word Processor XML) documents."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -20,7 +20,9 @@ authors = [
 
 dependencies = [
     "openai-agents>=0.22.0",
-    "python-hwpx>=6.3.0"
+    "python-hwpx>=6.3.0",
+    "langgraph>=1.2.11",
+    "langchain-openai>=1.6.0"
 ]
 
 [project.urls]
