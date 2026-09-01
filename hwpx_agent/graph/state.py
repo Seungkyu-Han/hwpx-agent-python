@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 from hwpx_agent.models import HwpxModel
@@ -6,4 +8,4 @@ from hwpx_agent.models import HwpxModel
 class State(BaseModel):
     prompt: str
     is_image_generate: bool
-    hwpx_model: HwpxModel
+    hwpx_model: Optional[HwpxModel]
