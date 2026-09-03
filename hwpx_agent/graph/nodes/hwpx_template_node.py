@@ -1,7 +1,7 @@
 from langchain_core.runnables import RunnableConfig
 
 from hwpx_agent.exceptions import AgentConfigException
-from hwpx_agent.graph import State
+from hwpx_agent.graph.state import State
 from hwpx_agent.models import HwpxModel
 from hwpx_agent.tools import HwpxTemplateAgent
 

@@ -1,6 +1,6 @@
 from typing import Literal
 
-from hwpx_agent.graph import State
+from hwpx_agent.graph.state import State
 
 
 def image_generate_route(state: State) -> Literal["image_generate_node", "_next"]:
