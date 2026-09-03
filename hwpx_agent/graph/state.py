@@ -9,3 +9,4 @@ class State(BaseModel):
     prompt: str
     is_image_generate: bool
     hwpx_model: Optional[HwpxModel]
+    hwpx: Optional[HwpxModel]
