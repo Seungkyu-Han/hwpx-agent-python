@@ -1,4 +1,4 @@
-class HwpxGenerateTemplateException(Exception):
+class AgentConfigException(Exception):
 
     def __init__(self, message: str):
         super().__init__(message)

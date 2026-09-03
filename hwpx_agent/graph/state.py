@@ -1,11 +1,15 @@
 from typing import Optional
 
-from pydantic import BaseModel
+from hwpx import HwpxDocument
+from pydantic import BaseModel, ConfigDict
 
 from hwpx_agent.models import HwpxModel
 
 
 class State(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
     prompt: str
     is_image_generate: bool
     hwpx_model: Optional[HwpxModel]
+    hwpx: Optional[HwpxDocument]

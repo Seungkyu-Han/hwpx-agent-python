@@ -1,14 +1,9 @@
-import asyncio
-import base64
-
-from agents import Agent, Runner
 from hwpx import HwpxDocument
+from langchain_core.runnables import RunnableConfig
 
-from .exceptions import HwpxGenerateTemplateException
+from .exceptions import HwpxEmptyException
 from .graph import build_graph, State
-from .models import HwpxModel, HwpxImageModel
-from .tools import ImageGenerateAgent
-from .transformers import model_to_hwpx
+from .tools import ImageGenerateAgent, HwpxTemplateAgent
 
 
 class HwpxAgent:
@@ -26,46 +21,12 @@ class HwpxAgent:
             model=model,
         )
 
-        self._agent = Agent(
-            name="hwpx-agent",
-            instructions=self._SYSTEM_PROMPT,
+        self._hwpx_template_agent = HwpxTemplateAgent(
             model=model,
-            output_type=HwpxModel,
         )
 
-        async def hwpx_template_func(prompt: str) -> HwpxModel:
-            return await self._hwpx_template_func(prompt)
+        self.graph = build_graph()
 
-        async def image_generate_func(hwpx_model: HwpxModel) -> HwpxModel:
-            return await self._image_generate_func(hwpx_model)
-
-        self.graph = build_graph(
-            hwpx_template_agent=hwpx_template_func,
-            image_generate_agent=image_generate_func,
-        )
-
-    async def _hwpx_template_func(self, prompt: str) -> HwpxModel:
-        result = await Runner.run(self._agent, prompt)
-        return result.final_output
-
-    async def _image_generate_func(self, hwpx_model: HwpxModel) -> HwpxModel:
-        async def process_image(hwpx_image: HwpxImageModel):
-            raw_bytes: bytes = await self._image_generate_agent.execute(hwpx_image.image_prompt)
-            hwpx_image.base64_image = base64.b64encode(raw_bytes).decode("utf-8")
-
-        hwpx_image_models: list[HwpxImageModel] = [content for content in hwpx_model.contents if
-                                                   isinstance(content, HwpxImageModel)]
-
-        image_tasks = [
-            process_image(content)
-            for content in hwpx_image_models
-            if content.image_prompt and content.base64_image is None
-        ]
-
-        if image_tasks:
-            await asyncio.gather(*image_tasks)
-
-        return hwpx_model
 
     async def generate_template(
             self,
@@ -76,15 +37,21 @@ class HwpxAgent:
             prompt=prompt,
             is_image_generate=is_image_generate,
             hwpx_model=None,
+            hwpx=None,
         )
 
-        result_dict = await self.graph.ainvoke(state)
+        result_dict = await self.graph.ainvoke(state, config=RunnableConfig(
+            configurable={
+                "image_generate_agent": self._image_generate_agent,
+                "hwpx_template_agent": self._hwpx_template_agent,
+            }
+        ))
 
         final_state: State = State(**result_dict)
 
-        hwpx_model: HwpxModel | None = final_state.hwpx_model
+        hwpx = final_state.hwpx
 
-        if not hwpx_model:
-            raise HwpxGenerateTemplateException(message="hwpx 파일이 생성되지 않았습니다.")
-
-        return model_to_hwpx(hwpx_model=hwpx_model)
+        if hwpx is None:
+            raise HwpxEmptyException("hwpx is None")
+        else:
+            return hwpx

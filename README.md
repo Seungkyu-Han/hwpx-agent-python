@@ -2,6 +2,10 @@
 
 **프롬프트를 통해 hwpx을 파일을 생성하고 수정하는 agent**
 
+[![PyPI version](https://img.shields.io/pypi/v/hwpx-agent)](https://pypi.org/project/hwpx-agent/)
+[![PyPI downloads](https://img.shields.io/pypi/dm/hwpx-agent)](https://pypi.org/project/hwpx-agent/)
+[![license](https://img.shields.io/pypi/l/hwpx-agent)](https://pypi.org/project/hwpx-agent/)
+
 ## 시작하기
 ```bash
 pip install hwpx-agent
@@ -30,6 +34,9 @@ async def main():
 if __name__ == "__main__":
     asyncio.run(main())
 ```
+
+### 결과물 예시
+![sample1.png](sample1.png)
 
 ### hwpx 파일 생성하기 (`generate_template`)
 프롬프트를 바탕으로 새로운 HWPX 문서 초안을 생성합니다.
