@@ -12,7 +12,7 @@ async def hwpx_model_transform_node(
 ) -> dict[str, HwpxDocument]:
 
     if not state.hwpx_model:
-        raise HwpxEmptyException("")
+        raise HwpxEmptyException("hwpx_model must be provided when request image generate")
 
     hwpx: HwpxDocument = model_to_hwpx(state.hwpx_model)
 
