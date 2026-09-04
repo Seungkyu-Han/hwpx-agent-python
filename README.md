@@ -26,7 +26,8 @@ async def main():
     )
 
     hwpx_document: HwpxDocument = await agent.generate_template(
-        prompt="생명과학 논문을 작성하고 싶은데 그거에 대한 초안을 작성해주고, 테이블로 이해하기 쉽도록 작성해줘"
+        prompt="생명과학 논문을 작성하고 싶은데 그거에 대한 초안을 작성해주고, 테이블로 이해하기 쉽도록 작성해줘",
+        is_image_generate=True,
     )
 
     hwpx_document.save_to_path("life_science.hwpx")
@@ -46,16 +47,18 @@ if __name__ == "__main__":
 from hwpx import HwpxDocument
 
 async def generate_template(
-    prompt: str,
+        prompt: str,
+        is_image_generate: bool = False,
 ) -> HwpxDocument:
     ...
 ```
 
 #### 파라미터 (Parameters)
 
-| 파라미터 | 타입 | 기본값 | 설명 |
-| --- | --- | --- | --- |
-| `prompt` | `str` | **필수** | 생성할 HWPX 문서의 내용, 구조, 구성 요소(표, 제목 등)에 대한 자연어 요청 사항 |
+| 파라미터     | 타입     | 기본값    | 설명                                                |
+|----------|--------|--------|---------------------------------------------------|
+| `prompt` | `str`  | **필수** | 생성할 HWPX 문서의 내용, 구조, 구성 요소(표, 제목 등)에 대한 자연어 요청 사항 |
+| `is_image_generate`     | `bool` | **선택** | 생성할 HWPX 문서에 AI를 통한 이미지 삽입의 여부                    |
 
 #### 리턴 타입 (Return)
 
@@ -73,3 +76,12 @@ hwpx_document: HwpxDocument = await agent.generate_template(
 hwpx_document.save_to_path("output.hwpx")
 
 ```
+
+#### 의존성
+해당 라이브러리들을 사용 중입니다.
+
+[python-hwpx](https://github.com/airmang/python-hwpx)
+
+[openai-agents-python](https://github.com/openai/openai-agents-python)
+
+[langgraph](https://github.com/langchain-ai/langgraph)
