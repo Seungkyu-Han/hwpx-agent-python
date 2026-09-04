@@ -36,7 +36,7 @@ if __name__ == "__main__":
 ```
 
 ### 결과물 예시
-![sample1.png](sample1.png)
+![https://github.com/Seungkyu-Han/hwpx-agent-python/blob/dev/sample1.png](sample1.png)
 
 ### hwpx 파일 생성하기 (`generate_template`)
 프롬프트를 바탕으로 새로운 HWPX 문서 초안을 생성합니다.
